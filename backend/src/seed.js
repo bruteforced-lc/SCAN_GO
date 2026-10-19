@@ -58,29 +58,40 @@ const realBarcodeProducts = [
   { name: 'Haldiram Chips', price: 30, category: 'Snacks', stock: 50, barcode: '8904063219718' },
 ];
 
-await connectDB();
+export async function seedDatabase() {
+  for (const p of sample) {
+    await Product.updateOne({ barcode: p.barcode }, { $set: p }, { upsert: true });
+  }
+  for (const p of realBarcodeProducts) {
+    await Product.updateOne({ barcode: p.barcode }, { $set: p }, { upsert: true });
+  }
+  const allProducts = [...sample, ...realBarcodeProducts];
 
-for (const p of sample) {
-  await Product.updateOne({ barcode: p.barcode }, { $set: p }, { upsert: true });
-}
-for (const p of realBarcodeProducts) {
-  await Product.updateOne({ barcode: p.barcode }, { $set: p }, { upsert: true });
-}
-const allProducts = [...sample, ...realBarcodeProducts];
-console.log(`Seeded ${allProducts.length} products:`);
-allProducts.forEach((p) => console.log(`  ${p.barcode}  ${p.name}  Rs.${p.price}`));
+  const adminEmail = 'admin@scango.com';
+  let adminStatus = 'already exists';
+  const adminPassword = process.env.ADMIN_PASSWORD || '124Dhruv@';
+  if (!(await User.findOne({ email: adminEmail }))) {
+    await User.create({
+      name: 'Store Admin',
+      email: adminEmail,
+      password: adminPassword,
+      role: 'admin',
+    });
+    adminStatus = 'created';
+  }
 
-const adminEmail = 'admin@scango.com';
-if (!(await User.findOne({ email: adminEmail }))) {
-  await User.create({
-    name: 'Store Admin',
-    email: adminEmail,
-    password: process.env.ADMIN_PASSWORD,
-    role: 'admin',
-  });
-  console.log(`Admin created -> ${adminEmail} / ${process.env.ADMIN_PASSWORD}`);
-} else {
-  console.log('Admin already exists');
+  return {
+    success: true,
+    productsSeeded: allProducts.length,
+    adminEmail,
+    adminStatus,
+  };
 }
 
-await mongoose.disconnect();
+// When run directly from terminal:
+if (process.argv[1]?.endsWith('seed.js')) {
+  await connectDB();
+  const res = await seedDatabase();
+  console.log(`Seeded ${res.productsSeeded} products, Admin ${res.adminStatus}`);
+  await mongoose.disconnect();
+}
