@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 min-h-screen antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply relative inline-flex items-center justify-center font-medium transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none rounded-xl px-4 py-2.5 text-sm;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:from-emerald-400 hover:to-teal-400;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-800 text-slate-100 hover:bg-slate-700 border border-slate-700/80 shadow-sm;
+  }
+
+  .btn-ghost {
+    @apply text-slate-300 hover:text-white hover:bg-slate-800/80;
+  }
+
+  .btn-danger {
+    @apply bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/30;
+  }
+
+  .input {
+    @apply w-full bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all text-sm;
+  }
+
+  .card {
+    @apply bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-xl shadow-black/20 p-5;
+  }
+
+  .glass-pill {
+    @apply px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md border;
+  }
+}
+
+/* Custom Reticle and Scan Laser */
+.scan-reticle {
+  position: relative;
+  box-shadow: 0 0 0 4000px rgba(15, 23, 42, 0.65);
+}
+
+.scan-laser-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #10b981, #34d399, transparent);
+  box-shadow: 0 0 16px 2px #10b981;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
